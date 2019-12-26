@@ -1,0 +1,15 @@
+parameters:
+  private_net_name: Net1
+  private_subnet_name: subnet1
+  private_subnet_ip_prefix: 10.100.0.0/24
+  private_subnet_gateway: 10.100.0.1
+  private_net_2_name: Net2
+  private_subnet_2_name: subnet2
+  private_subnet_2_ip_prefix: 10.200.0.0/24
+  public_net_name: ExtNet
+  admin_server_ssh_port: 3000
+  # load_balancer_algorithm: ROUND_ROBIN
+  # load_balancer_pool_protocol: HTTP
+  # load_balancer_listener_port: 80
+  # load_balancer_listener_protocol: HTTP
+  # app_server_listening_port: 80
