@@ -40,6 +40,10 @@ parameters:
     type: string
     description: Puerto SSH del servidor de administración
 
+  db_server_ip_address:
+    type: string
+    description: Direccion ip servidor de base de datos
+
   
 
 resources:
@@ -113,7 +117,7 @@ resources:
       private_subnet_name: { get_param: private_subnet_name }
       private_net_2_name: { get_param: private_net_2_name }
       private_subnet_2_name: { get_param: private_subnet_2_name }
-      #db_server_ip_address: { get_param: db_server_ip_address }
+      # db_server_ip_address: { get_param: db_server_ip_address }
       
   app_server_2:
     type: app_server.yaml
@@ -124,7 +128,7 @@ resources:
       private_subnet_name: { get_param: private_subnet_name }
       private_net_2_name: { get_param: private_net_2_name }
       private_subnet_2_name: { get_param: private_subnet_2_name }
-      #db_server_ip_address: { get_param: db_server_ip_address }
+      # db_server_ip_address: { get_param: db_server_ip_address }
       
   app_server_3:
     type: app_server.yaml
@@ -135,19 +139,16 @@ resources:
       private_subnet_name: { get_param: private_subnet_name }
       private_net_2_name: { get_param: private_net_2_name }
       private_subnet_2_name: { get_param: private_subnet_2_name }
-      #db_server_ip_address: { get_param: db_server_ip_address }
+      # db_server_ip_address: { get_param: db_server_ip_address }
       
-
-  
-
-#   db_server:
-#     type: db_server.yaml
-#     depends_on: [ private_net_2, private_subnet_2 ]
-#     properties:
-#       server_name: db_server
-#       private_net_2_name: { get_param: private_net_2_name }
-#       private_subnet_2_name: { get_param: private_subnet_2_name }
-#       private_ip_address: { get_param: db_server_ip_address }
+  db_server:
+    type: db_server.yaml
+    depends_on: [ private_net_2, private_subnet_2 ]
+    properties:
+      server_name: db_server
+      private_net_2_name: { get_param: private_net_2_name }
+      private_subnet_2_name: { get_param: private_subnet_2_name }
+      private_ip_address: { get_param: db_server_ip_address }
 
   private_net: 
     type: OS::Neutron::Net 
@@ -292,9 +293,9 @@ outputs:
     description: Direccion IP en la red privada de la maquina
     value: { get_attr: [ app_server_3, app_server ] }
 
-#   db_server_ip:
-#     description: Direccion IP en la red privada de la maquina
-#     value: { get_attr: [ db_server, first_address ] }
+  db_server_ip:
+    description: Direccion IP en la red privada de la maquina
+    value: { get_attr: [ db_server, first_address ] }
 
   admin_private_key:
     description: Clave privada clave_generada

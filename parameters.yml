@@ -8,8 +8,10 @@ parameters:
   private_subnet_2_ip_prefix: 10.200.0.0/24
   public_net_name: ExtNet
   admin_server_ssh_port: 3000
+  db_server_ip_address: 10.200.0.3
   # load_balancer_algorithm: ROUND_ROBIN
   # load_balancer_pool_protocol: HTTP
   # load_balancer_listener_port: 80
   # load_balancer_listener_protocol: HTTP
   # app_server_listening_port: 80
+  
