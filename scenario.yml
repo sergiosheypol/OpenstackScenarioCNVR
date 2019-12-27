@@ -44,6 +44,32 @@ parameters:
     type: string
     description: Direccion ip servidor de base de datos
 
+  load_balancer_algorithm:
+    type: string
+    description: Algoritmo empleado por el balanceador
+    default: ROUND_ROBIN
+    constraints:
+      - allowed_values: [ROUND_ROBIN, LEAST_CONNECTIONS, SOURCE_IP]
+
+  load_balancer_pool_protocol:
+    type: string
+    description: Protocolo con el que trabajará el balanceador
+    default: HTTP
+    constraints:
+      - allowed_values: [TCP, HTTP, HTTPS]
+
+  load_balancer_listener_protocol:
+    type: string
+    description: Protocolo que esuchará el balanceador
+    default: HTTP
+    constraints:
+      - allowed_values: [TCP, HTTP, HTTPS, TERMINATED_HTTPS]
+
+  load_balancer_listener_port:
+    type: string
+    description: Puerto en el que escuchará el balanceador
+
+
   
 
 resources:
@@ -139,7 +165,7 @@ resources:
       private_subnet_name: { get_param: private_subnet_name }
       private_net_2_name: { get_param: private_net_2_name }
       private_subnet_2_name: { get_param: private_subnet_2_name }
-      # db_server_ip_address: { get_param: db_server_ip_address }
+     # db_server_ip_address: { get_param: db_server_ip_address }
       
   db_server:
     type: db_server.yaml
@@ -189,17 +215,40 @@ resources:
       router: { get_resource: mi_router }
       subnet: { get_resource: private_subnet }
 
+  
+  lb:
+    type: OS::Octavia::LoadBalancer
+    properties:
+      description: Balanceador de carga sobre los servidores web
+      vip_subnet: {get_param: private_subnet}
+
   # mi_balanceador:
   #   type: OS::Neutron::LBaaS::LoadBalancer
   #   properties:
   #     description: Balanceador de carga sobre los servidores web
   #     vip_subnet: { get_resource: private_subnet }
 
+
+  lb_floating:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network_id: {get_param: public_net_name}
+      port_id: {get_attr: [lb, vip_port_id]}
+
   # balanceador_public:
   #   type: OS::Neutron::FloatingIP
   #   properties:
   #     floating_network_id: { get_param: public_net_name }
   #     port_id: { get_attr: [ mi_balanceador, vip_port_id ] }
+
+  listener:
+    type: OS::Octavia::Listener
+    depends_on: [ lb ]
+    properties:
+      description: Configuración de qué y dónde esuchará el balanceador
+      loadbalancer: { get_resource: lb }
+      protocol: { get_param: load_balancer_listener_port }
+      protocol_port: { get_param: load_balancer_listener_port }
 
   # balanceador_listener:
   #   type: OS::Neutron::LBaaS::Listener
@@ -210,6 +259,16 @@ resources:
   #     protocol_port: { get_param: load_balancer_listener_port }
   #     loadbalancer: { get_resource: mi_balanceador }
 
+  pool:
+    type: OS::Octavia::Pool
+    properties:
+      description: Conjunto de servidores sobre los que se balanceará y algoritmo de balanceo
+      listener: { get_resource: listener }
+      lb_algorithm: { get_param: load_balancer_algorithm }
+      protocol: { get_param: load_balancer_pool_protocol }
+      session_persistence:
+        type: SOURCE_IP
+
   # balanceador_pool:
   #   type: OS::Neutron::LBaaS::Pool
   #   properties:
@@ -217,6 +276,15 @@ resources:
   #     lb_algorithm: {get_param: load_balancer_algorithm}
   #     listener: { get_resource: balanceador_listener }
   #     protocol: { get_param: load_balancer_pool_protocol }
+
+  lb_monitor:
+    type: OS::Octavia::HealthMonitor
+    properties:
+      pool: { get_resource: pool }
+      type: TCP
+      delay: 5
+      max_retries: 5
+      timeout: 5
 
   # balanceador_miembro_1:
   #   type: OS::Neutron::LBaaS::PoolMember
