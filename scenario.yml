@@ -174,19 +174,19 @@ resources:
       network_id: { get_resource: private_net_2 }
       cidr: { get_param: private_subnet_2_ip_prefix }
 
-  # mi_router:
-  #   type: OS::Neutron::Router
-  #   properties:
-  #     name: mi_router
-  #     external_gateway_info: 
-  #       network: { get_param: public_net_name }
+  mi_router:
+    type: OS::Neutron::Router
+    properties:
+      name: mi_router
+      external_gateway_info: 
+        network: { get_param: public_net_name }
 
-  # interfaz_router:
-  #   type: OS::Neutron::RouterInterface
-  #   depends_on: [ mi_router ]
-  #   properties:
-  #     router: { get_resource: mi_router }
-  #     subnet: { get_resource: private_subnet }
+  interfaz_router:
+    type: OS::Neutron::RouterInterface
+    depends_on: [ mi_router ]
+    properties:
+      router: { get_resource: mi_router }
+      subnet: { get_resource: private_subnet }
 
   # mi_balanceador:
   #   type: OS::Neutron::LBaaS::LoadBalancer
