@@ -1,5 +1,5 @@
 # Creación LB
-neutron lbaas-loadbalancer-create --name subnet1 subnet1
+neutron lbaas-loadbalancer-create --name lb subnet1
 
 openstack security group create lbaasv2
 openstack security group rule create --protocol icmp --ingress lbaasv2
