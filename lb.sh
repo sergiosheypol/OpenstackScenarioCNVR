@@ -30,3 +30,6 @@ VIP_PORT_LB="$( neutron lbaas-loadbalancer-show -c vip_port_id -f value "${ID_LB
 ID_LB_FIP="$( openstack ip floating create ExtNet -c id -f value )"
 neutron floatingip-associate "${ID_LB_FIP}" "${VIP_PORT_LB}"
 
+#Check LB is running: neutron lbaas-loadbalancer-show lb
+
+
