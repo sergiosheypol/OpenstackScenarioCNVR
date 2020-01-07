@@ -8,7 +8,11 @@ openstack firewall group rule create --protocol tcp --destination-port 22 --dest
 openstack firewall group rule create --protocol any --source-ip-address 10.100.0.0/24 --action allow --name fw_rule_int
 
 # Policy creation
-openstack firewall group policy create --firewall-rule "fw_rule_lb fw_rule_admin fw_rule_int" myfw
+openstack firewall group policy create --firewall-rule "fw_rule_lb"  myfw
 
 # Create firewall group
-openstack firewall group create --ingress-firewall-policy "myfw" --port 
+openstack firewall group create --ingress-firewall-policy "myfw" --no-port 
+
+# Adding new rules
+openstack firewall group policy add rule myfw "fw_rule_admin"
+openstack firewall group policy add rule myfw "fw_rule_int"
