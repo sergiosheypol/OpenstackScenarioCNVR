@@ -23,3 +23,10 @@ S3="$(openstack server show app_server_3 -c addresses -f value | awk 'FNR == 1 {
 neutron lbaas-member-create --name lb-member-01 --subnet subnet1 --address "${S1}" --protocol-port 80 lb-http-pool
 neutron lbaas-member-create --name lb-member-02 --subnet subnet1 --address "${S2}" --protocol-port 80 lb-http-pool 
 neutron lbaas-member-create --name lb-member-03 --subnet subnet1 --address "${S3}" --protocol-port 80 lb-http-pool 
+
+# Assign floating IP to LB
+ID_LB="$( neutron lbaas-loadbalancer-list -c id -f value )"
+VIP_PORT_LB="$( neutron lbaas-loadbalancer-show -c vip_port_id -f value "${ID_LB}" )"
+ID_LB_FIP="$( openstack ip floating create ExtNet -c id -f value )"
+neutron floatingip-associate "${ID_LB_FIP}" "${VIP_PORT_LB}"
+
