@@ -4,35 +4,36 @@ description: pFinalCNVR
 
 parameters:
 
-  public_net_name:
+  extnet_name:
       type: string
       default: ExtNet
       description: Red publica
 
-  private_net_name: 
+  net1_name: 
       type: string 
       description: red privada 1
 
-  private_subnet_name: 
+  subnet1_name: 
       type: string 
       description: subred privada 1
-  private_subnet_ip_prefix: 
+
+  subnet1_prefix: 
       type: string 
       description: prefijo de la subred privada 1
 
-  private_subnet_gateway: 
+  subnet1_gateway: 
     type: string 
     description: Pasarela de la subred privada 1
 
-  private_net_2_name: 
+  net2_name: 
     type: string 
     description: Nombre de la red privada 2
 
-  private_subnet_2_name: 
+  subnet2_name: 
     type: string 
     description: Nombre de la subred privada 2
 
-  private_subnet_2_ip_prefix: 
+  subnet2_prefix: 
     type: string 
     description: CIDR de la subred privada 2
 
@@ -86,108 +87,108 @@ resources:
     type: OS::Neutron::Port
     depends_on: [ open_security_group ]
     properties:
-      network_id: { get_resource: private_net }
+      network_id: { get_resource: net1 }
       security_groups:
         - open
       fixed_ips:
-        - subnet_id: { get_resource: private_subnet }
+        - subnet_id: { get_resource: subnet1 }
 
   admin_server_port1:
     type: OS::Neutron::Port
     depends_on: [ open_security_group ]
     properties:
-      network_id: { get_resource: private_net_2 }
+      network_id: { get_resource: net2 }
       security_groups:
         - open
       fixed_ips:
-        - subnet_id: { get_resource: private_subnet_2 }
+        - subnet_id: { get_resource: subnet2 }
 
   admin_server_public:
     type: OS::Neutron::FloatingIP
     properties:
-      floating_network_id: { get_param: public_net_name }
+      floating_network_id: { get_param: extnet_name }
       port_id: { get_resource: admin_server_port0 }
 
   app_server_1:
     type: app_server.yaml
-    depends_on: [ private_net, private_subnet, private_net_2, private_subnet_2 ]
+    depends_on: [ net1, subnet1, net2, subnet2 ]
     properties:
       server_name: app_server_1
-      private_net_name: { get_param: private_net_name }
-      private_subnet_name: { get_param: private_subnet_name }
-      private_net_2_name: { get_param: private_net_2_name }
-      private_subnet_2_name: { get_param: private_subnet_2_name }
+      net1_name: { get_param: net1_name }
+      subnet1_name: { get_param: subnet1_name }
+      net2_name: { get_param: net2_name }
+      subnet2_name: { get_param: subnet2_name }
       # db_server_ip_address: { get_param: db_server_ip_address }
       
   app_server_2:
     type: app_server.yaml
-    depends_on: [ private_net, private_subnet, private_net_2, private_subnet_2 ]
+    depends_on: [ net1, subnet1, net2, subnet2 ]
     properties:
       server_name: app_server_2
-      private_net_name: { get_param: private_net_name }
-      private_subnet_name: { get_param: private_subnet_name }
-      private_net_2_name: { get_param: private_net_2_name }
-      private_subnet_2_name: { get_param: private_subnet_2_name }
+      net1_name: { get_param: net1_name }
+      subnet1_name: { get_param: subnet1_name }
+      net2_name: { get_param: net2_name }
+      subnet2_name: { get_param: subnet2_name }
       # db_server_ip_address: { get_param: db_server_ip_address }
       
   app_server_3:
     type: app_server.yaml
-    depends_on: [ private_net, private_subnet, private_net_2, private_subnet_2 ]
+    depends_on: [ net1, subnet1, net2, subnet2 ]
     properties:
       server_name: app_server_3
-      private_net_name: { get_param: private_net_name }
-      private_subnet_name: { get_param: private_subnet_name }
-      private_net_2_name: { get_param: private_net_2_name }
-      private_subnet_2_name: { get_param: private_subnet_2_name }
+      net1_name: { get_param: net1_name }
+      subnet1_name: { get_param: subnet1_name }
+      net2_name: { get_param: net2_name }
+      subnet2_name: { get_param: subnet2_name }
       # db_server_ip_address: { get_param: db_server_ip_address }
       
   db_server:
     type: db_server.yaml
-    depends_on: [ private_net_2, private_subnet_2 ]
+    depends_on: [ net2, subnet2 ]
     properties:
       server_name: db_server
-      private_net_2_name: { get_param: private_net_2_name }
-      private_subnet_2_name: { get_param: private_subnet_2_name }
+      net2_name: { get_param: net2_name }
+      subnet2_name: { get_param: subnet2_name }
       private_ip_address: { get_param: db_server_ip_address }
 
-  private_net: 
+  net1: 
     type: OS::Neutron::Net 
     properties: 
-      name: { get_param: private_net_name }
+      name: { get_param: net1_name }
 
-  private_subnet: 
+  subnet1: 
     type: OS::Neutron::Subnet 
     properties: 
-      name: { get_param: private_subnet_name }
-      network_id: { get_resource: private_net }
-      cidr: { get_param: private_subnet_ip_prefix }
-      gateway_ip: { get_param: private_subnet_gateway }
+      name: { get_param: subnet1_name }
+      network_id: { get_resource: net1 }
+      cidr: { get_param: subnet1_prefix }
+      gateway_ip: { get_param: subnet1_gateway }
 
-  private_net_2: 
+  net2: 
     type: OS::Neutron::Net 
     properties: 
-      name: { get_param: private_net_2_name }
+      name: { get_param: net2_name }
 
-  private_subnet_2: 
+  subnet2: 
     type: OS::Neutron::Subnet 
     properties: 
-      name: { get_param: private_subnet_2_name }
-      network_id: { get_resource: private_net_2 }
+      name: { get_param: subnet2_name }
+      network_id: { get_resource: net2 }
       cidr: { get_param: private_subnet_2_ip_prefix }
 
-  mi_router:
+  r0:
     type: OS::Neutron::Router
     properties:
-      name: mi_router
+      name: r0
       external_gateway_info: 
-        network: { get_param: public_net_name }
+        network: { get_param: extnet_name }
 
   interfaz_router:
     type: OS::Neutron::RouterInterface
-    depends_on: [ mi_router ]
+    depends_on: [ r0 ]
     properties:
-      router: { get_resource: mi_router }
-      subnet: { get_resource: private_subnet }
+      router: { get_resource: r0 }
+      subnet: { get_resource: subnet1 }
 
 outputs:
 
@@ -197,7 +198,7 @@ outputs:
 
   admin_server_private_ip_net1:
     description: Direccion IP en la red privada 1 de la maquina
-    value: { get_attr: [ admin_server, networks, { get_param: private_net_name }, 0 ] }
+    value: { get_attr: [ admin_server, networks, { get_param: net1_name }, 0 ] }
 
  
 
