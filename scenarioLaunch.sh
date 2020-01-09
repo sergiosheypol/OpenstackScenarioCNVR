@@ -4,7 +4,7 @@ cd openstack_lab-stein_4n_classic_ovs-v01
 sudo vnx -f openstack_lab.xml -v --create
 sudo vnx -f openstack_lab.xml -v -x start-all
 sudo vnx -f openstack_lab.xml -v -x load-img
-sudo vnx_config_nat ExtNet
+sudo vnx_config_nat ExtNet enp2s0
 #sudo vnx -f openstack_lab.xml -v -x create-demo-scenario
 
 
