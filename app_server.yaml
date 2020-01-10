@@ -18,7 +18,7 @@ parameters:
 
   image:
     type: string
-    default: cirros-0.3.4-x86_64-vnx
+    default: xenial-server-cloudimg-amd64-vnx
     description: Nombre de la imagen
 
   private_net_name: 
@@ -51,6 +51,8 @@ resources:
       image: { get_param: image }
       flavor: { get_param: flavor }
       #key_name: { get_resource: clave_generada }
+      user_data_format: RAW
+      user_data: { get_file: cloud-init/app_1_config.yaml }
       #user_data_format: RAW
       #user_data: 
         # str_replace:

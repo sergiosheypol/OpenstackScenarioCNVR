@@ -117,8 +117,8 @@ resources:
       private_subnet_name: { get_param: private_subnet_name }
       private_net_2_name: { get_param: private_net_2_name }
       private_subnet_2_name: { get_param: private_subnet_2_name }
-      user_data_format: RAW
-      user_data: { get_file: cloud-init/app_1_config.yaml }
+      #user_data_format: RAW
+      #user_data: { get_file: cloud-init/app_1_config.yaml }
       # db_server_ip_address: { get_param: db_server_ip_address }
       
   app_server_2:
@@ -130,8 +130,8 @@ resources:
       private_subnet_name: { get_param: private_subnet_name }
       private_net_2_name: { get_param: private_net_2_name }
       private_subnet_2_name: { get_param: private_subnet_2_name }
-      user_data_format: RAW
-      user_data: { get_file: cloud-init/app_2_config.yaml }
+      #user_data_format: RAW
+      #user_data: { get_file: cloud-init/app_2_config.yaml }
       # db_server_ip_address: { get_param: db_server_ip_address }
       
   app_server_3:
@@ -143,8 +143,8 @@ resources:
       private_subnet_name: { get_param: private_subnet_name }
       private_net_2_name: { get_param: private_net_2_name }
       private_subnet_2_name: { get_param: private_subnet_2_name }
-      user_data_format: RAW
-      user_data: { get_file: cloud-init/app_3_config.yaml }
+      #      user_data_format: RAW
+      #user_data: { get_file: cloud-init/app_3_config.yaml }
       # db_server_ip_address: { get_param: db_server_ip_address }
       
   db_server:

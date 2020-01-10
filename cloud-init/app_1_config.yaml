@@ -3,4 +3,6 @@ hostname: app_server_1
 packages:
         - python3
 runcmd:
-        - echo "<html> <body> server1 </body> </html>" > /root/index.html
+        - echo "<html> <body> server1 </body> </html>" > /home/index.html
+        - cd /home  
+        - python -m SimpleHTTPServer 80
