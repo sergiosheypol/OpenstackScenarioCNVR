@@ -1,5 +1,5 @@
 cd /mnt/tmp
-#/mnt/vnx/repo/cnvr/bin/get-openstack-tutorial.sh
+/mnt/vnx/repo/cnvr/bin/get-openstack-tutorial.sh
 cd openstack_lab-stein_4n_classic_ovs-v05
 sudo vnx -f openstack_lab.xml -v --create
 sudo vnx -f openstack_lab.xml -v -x start-all

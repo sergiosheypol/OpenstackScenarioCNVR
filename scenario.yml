@@ -75,7 +75,6 @@ resources:
       image: xenial-server-cloudimg-amd64-vnx
       flavor: m1.smaller
       user_data_format: SOFTWARE_CONFIG
-      # user_data:
       #   get_resource: admin_server_init_mime
       key_name: { get_resource: clave_generada }
       networks:
@@ -90,7 +89,8 @@ resources:
       security_groups:
         - open
       fixed_ips:
-        - subnet_id: { get_resource: private_subnet }
+       #- subnet_id: { get_resource: private_subnet }
+        - ip_address: 10.100.0.10
 
   admin_server_port1:
     type: OS::Neutron::Port
@@ -143,7 +143,6 @@ resources:
       private_subnet_name: { get_param: private_subnet_name }
       private_net_2_name: { get_param: private_net_2_name }
       private_subnet_2_name: { get_param: private_subnet_2_name }
-      #      user_data_format: RAW
       #user_data: { get_file: cloud-init/app_3_config.yaml }
       # db_server_ip_address: { get_param: db_server_ip_address }
       

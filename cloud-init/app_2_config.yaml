@@ -1,6 +1,0 @@
-#cloud-config
-hostname: app_server_2
-packages:
-        - python3
-runcmd:
-        - echo "<html> <body> server2 </body> </html>" > /root/index.html
