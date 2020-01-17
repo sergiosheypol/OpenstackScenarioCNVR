@@ -18,7 +18,7 @@ parameters:
 
   image:
     type: string
-    default: cirros-0.3.4-x86_64-vnx
+    default: xenial-server-cloudimg-amd64-vnx
     description: Nombre de la imagen
 
   private_net_2_name: 
@@ -44,10 +44,7 @@ resources:
       flavor: { get_param: flavor }
       #key_name: { get_resource: clave_generada }
       user_data_format: RAW
-      user_data: |
-        #cloud-config
-        runcmd:
-          - [ mongod, --smallfiles]
+      user_data: { get_file: cloud-init/db.yaml }
       networks:
         - port: { get_resource: db_server_port0 }
 
