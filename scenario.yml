@@ -75,6 +75,7 @@ resources:
       image: xenial-server-cloudimg-amd64-vnx
       flavor: m1.smaller
       user_data_format: SOFTWARE_CONFIG
+      user_data: { get_file: cloud-init/admin.yaml }
       #   get_resource: admin_server_init_mime
       key_name: { get_resource: clave_generada }
       networks:

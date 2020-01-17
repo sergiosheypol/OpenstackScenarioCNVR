@@ -1,8 +1,10 @@
 #cloud-config
 hostname: app_server_1
 packages:
-        - python3
+        - python
 runcmd:
+        - ifconfig ens4 up 
+        - dhclient ens4
         - curl http://169.254.169.254/openstack/latest/meta_data.json > /home/index.html
-        - cd /home  
+        - cd /home
         - python -m SimpleHTTPServer 80
