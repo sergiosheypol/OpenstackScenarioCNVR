@@ -37,20 +37,14 @@ parameters:
     type: string 
     description: Nombre de la subred privada 2
 
-#   db_server_ip_address: 
-#     type: string 
-#     description: IP de la base de datos en la subred privada 2
-
 resources:
 
   app_server:
     type: OS::Nova::Server
-    #depends_on: [ clave_generada ]
     properties:
       name: { get_param: server_name }
       image: { get_param: image }
       flavor: { get_param: flavor }
-      #key_name: { get_resource: clave_generada }
       user_data_format: RAW
       user_data: { get_file: cloud-init/app_1_config.yaml }
       networks:

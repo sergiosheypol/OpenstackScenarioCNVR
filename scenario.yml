@@ -36,10 +36,6 @@ parameters:
     type: string 
     description: CIDR de la subred privada 2
 
-  # admin_server_ssh_port:
-  #   type: string
-  #   description: Puerto SSH del servidor de administración
-
   db_server_ip_address:
     type: string
     description: Direccion ip servidor de base de datos
@@ -61,12 +57,6 @@ resources:
       name: clave_generada
       save_private_key: true
 
-  # admin_server_init_mime:
-  #   type: OS::Heat::MultipartMime
-  #   properties:
-  #     parts:
-  #       - config: {get_resource: admin_server_init}
-
   admin_server:
     type: OS::Nova::Server
     depends_on: [ clave_generada ]
@@ -76,7 +66,6 @@ resources:
       flavor: m1.smaller
       user_data_format: SOFTWARE_CONFIG
       user_data: { get_file: cloud-init/admin.yaml }
-      #   get_resource: admin_server_init_mime
       key_name: { get_resource: clave_generada }
       networks:
         - port: { get_resource: admin_server_port0 }
@@ -118,9 +107,6 @@ resources:
       private_subnet_name: { get_param: private_subnet_name }
       private_net_2_name: { get_param: private_net_2_name }
       private_subnet_2_name: { get_param: private_subnet_2_name }
-      #user_data_format: RAW
-      #user_data: { get_file: cloud-init/app_1_config.yaml }
-      # db_server_ip_address: { get_param: db_server_ip_address }
       
   app_server_2:
     type: app_server.yaml
@@ -131,9 +117,6 @@ resources:
       private_subnet_name: { get_param: private_subnet_name }
       private_net_2_name: { get_param: private_net_2_name }
       private_subnet_2_name: { get_param: private_subnet_2_name }
-      #user_data_format: RAW
-      #user_data: { get_file: cloud-init/app_2_config.yaml }
-      # db_server_ip_address: { get_param: db_server_ip_address }
       
   app_server_3:
     type: app_server.yaml
@@ -144,8 +127,6 @@ resources:
       private_subnet_name: { get_param: private_subnet_name }
       private_net_2_name: { get_param: private_net_2_name }
       private_subnet_2_name: { get_param: private_subnet_2_name }
-      #user_data: { get_file: cloud-init/app_3_config.yaml }
-      # db_server_ip_address: { get_param: db_server_ip_address }
       
   db_server:
     type: db_server.yaml

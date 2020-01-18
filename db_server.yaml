@@ -37,12 +37,10 @@ resources:
 
   db_server:
     type: OS::Nova::Server
-    #depends_on: [ clave_generada ]
     properties:
       name: { get_param: server_name }
       image: { get_param: image }
       flavor: { get_param: flavor }
-      #key_name: { get_resource: clave_generada }
       user_data_format: RAW
       user_data: { get_file: cloud-init/db.yaml }
       networks:
