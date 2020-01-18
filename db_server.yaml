@@ -18,7 +18,7 @@ parameters:
 
   image:
     type: string
-    default: xenial-server-cloudimg-amd64-vnx
+    default: db-image
     description: Nombre de la imagen
 
   private_net_2_name: 

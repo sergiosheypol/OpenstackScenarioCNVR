@@ -6,6 +6,7 @@ sudo vnx -f openstack_lab.xml -v -x start-all
 sudo vnx -f openstack_lab.xml -v -x load-img
 sudo vnx_config_nat ExtNet enp2s0
 #sudo vnx -f openstack_lab.xml -v -x create-demo-scenario
+glance image-create --name "db-image" --file ../OpenstackScenarioCNVR/db.raw --disk-format raw --container-format bare --visibility public --progress
 
 
 ############################
