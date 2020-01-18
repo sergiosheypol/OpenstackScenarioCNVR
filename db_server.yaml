@@ -1,16 +1,16 @@
 heat_template_version: 2017-02-24
 
-description: DB server deployment template
+description: pFinalCNVR - DB 
 
 parameters:
 
   server_name:
     type: string
-    description: Nombre del servidor
+    description: Server name 
 
   flavor:
     type: string
-    description: Flavor de la instancia
+    description: Instance resources (flavor)
     default: m1.smaller
     constraints:
       - allowed_values: [m1.nano, m1.tiny, m1.smaller]
@@ -19,19 +19,19 @@ parameters:
   image:
     type: string
     default: db-image
-    description: Nombre de la imagen
+    description: Image name
 
-  private_net_2_name: 
+  net2_name: 
     type: string 
-    description: Nombre de la red privada 2
+    description: Net 2 name
 
-  private_subnet_2_name: 
+  subnet2_name: 
     type: string 
-    description: Nombre de la subred privada 2
+    description: Subnet 2 name
 
   private_ip_address:
     type: string
-    description: Direccion ip en la subred privada 2
+    description: Assigned IP addr
 
 resources:
 
@@ -49,14 +49,14 @@ resources:
   db_server_port0:
     type: OS::Neutron::Port
     properties:
-      network_id: { get_param: private_net_2_name }
+      network_id: { get_param: net2_name }
       security_groups:
         - open
       fixed_ips:
-        - subnet_id: { get_param: private_subnet_2_name }
+        - subnet_id: { get_param: subnet2_name }
           ip_address: { get_param: private_ip_address }
 
 outputs:
   first_address:
-    description: Direccion IP en la red privada de la maquina
+    description: DB private IP addr
     value: { get_attr: [ db_server, first_address ] }

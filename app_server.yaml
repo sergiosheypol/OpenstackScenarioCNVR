@@ -1,16 +1,16 @@
 heat_template_version: 2017-02-24
 
-description: App servers deployment template
+description: pFinalCNVR - APP
 
 parameters:
 
   server_name:
     type: string
-    description: Nombre del servidor
+    description: Server name
 
   flavor:
     type: string
-    description: Flavor de la instancia
+    description: Instance resources (flavor)
     default: m1.smaller
     constraints:
       - allowed_values: [m1.nano, m1.tiny, m1.small, m1.smaller, m1.large]
@@ -19,23 +19,23 @@ parameters:
   image:
     type: string
     default: xenial-server-cloudimg-amd64-vnx
-    description: Nombre de la imagen
+    description: Image name
 
-  private_net_name: 
+  net1_name: 
     type: string 
-    description: Nombre de la red privada 1
+    description: Net 1 name
 
-  private_subnet_name: 
+  subnet1_name: 
     type: string 
-    description: Nombre de la subred privada 1
+    description: Subnet 1 name
 
-  private_net_2_name: 
+  net2_name: 
     type: string 
-    description: Nombre de la red privada 2
+    description: Net 2 name
 
-  private_subnet_2_name: 
+  subnet2_name: 
     type: string 
-    description: Nombre de la subred privada 2
+    description: Subnet 2 name
 
 resources:
 
@@ -54,23 +54,23 @@ resources:
   app_server_port0:
     type: OS::Neutron::Port
     properties:
-      network_id: { get_param: private_net_name }
+      network_id: { get_param: net1_name }
       security_groups:
         - open
       fixed_ips:
-        - subnet_id: { get_param: private_subnet_name }
+        - subnet_id: { get_param: subnet1_name }
 
   app_server_port1:
     type: OS::Neutron::Port
     properties:
-      network_id: { get_param: private_net_2_name }
+      network_id: { get_param: net2_name }
       security_groups:
         - open
       fixed_ips:
-        - subnet_id: { get_param: private_subnet_2_name }
+        - subnet_id: { get_param: subnet2_name }
 
 outputs:
 
   app_server:
-    description: Atributos del servidor de aplicaciones
-    value: { get_attr: [ app_server, networks, { get_param: private_net_name }, 0 ] }
+    description: App server outputs
+    value: { get_attr: [ app_server, networks, { get_param: net1_name }, 0 ] }
