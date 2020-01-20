@@ -1,0 +1,1 @@
+openstack stack output show pFinalStack admin_private_key -c output_value -f value > keypair.pem
