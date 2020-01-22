@@ -2,6 +2,4 @@
 hostname: db
 runcmd:
         - echo "nameserver 8.8.8.8 " > /etc/resolv.conf
-        - sed -i '/Port 22/c\Port 2222' /etc/ssh/sshd_config
-        - service sshd restart
  
